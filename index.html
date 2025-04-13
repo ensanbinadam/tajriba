@@ -699,14 +699,23 @@
             document.getElementById('scoreCounter').innerHTML = `🏆 الدرجات: ٠ من ${toArabicNumbers(state.questions.length)}`;
             document.getElementById('totalQuestions').textContent = toArabicNumbers(state.questions.length);
 
-            // إضافة زر لتحميل الأسئلة
-            const loadButton = document.createElement('button');
-            loadButton.textContent = 'تحميل الأسئلة من ملف';
-            loadButton.className = 'nav-btn';
-            loadButton.style.margin = '10px auto';
-            loadButton.style.display = 'block';
-            loadButton.onclick = loadQuestionsFromFile;
-            document.querySelector('.header').appendChild(loadButton);
+           // تحميل الأسئلة تلقائيًا من ملف JSON موجود في نفس مجلد index.html
+            fetch('questions.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('لم يتم العثور على ملف الأسئلة.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    state.questions = data;
+                    init();
+                })
+                .catch(error => {
+                    console.error('خطأ أثناء تحميل الأسئلة:', error);
+                    alert('فشل تحميل الأسئلة من الملف.');
+                });
+
         };
     </script>
 </body>
