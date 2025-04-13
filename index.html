@@ -229,8 +229,14 @@
     }
 
     function showResult() {
-      document.querySelector(".quiz-box").style.display = "none";
-      document.getElementById("scoreBoard").style.display = "block";
+      const quizBox = document.querySelector('.quiz-box');
+      const scoreBoard = document.getElementById('scoreBoard');
+      if (!quizBox || !scoreBoard) {
+        alert("❌ لا يمكن عرض النتيجة، عنصر مفقود في الصفحة.");
+        return;
+      }
+      quizBox.style.display = "none";
+      scoreBoard.style.display = "block";
       document.getElementById("finalScore").textContent = state.score;
       document.getElementById("totalQuestions").textContent = state.questions.length;
     }
