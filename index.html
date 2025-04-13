@@ -127,11 +127,6 @@
   </div>
 
   <script>
-    function toArabicNumbers(num) {
-      if (num === undefined || num === null) return "٠";
-      return num.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
-    }
-
     const state = {
       currentQuestion: 0,
       score: 0,
@@ -173,7 +168,6 @@
       document.getElementById("prevBtn").disabled = state.currentQuestion === 0;
       document.getElementById("nextBtn").disabled = state.currentQuestion === state.questions.length - 1;
       document.getElementById("progress").style.width = `${(state.currentQuestion / state.questions.length) * 100}%`;
-      document.getElementById("quizTitle").textContent = `السؤال ${toArabicNumbers(state.currentQuestion + 1)} من ${toArabicNumbers(state.questions.length)}`;
 
       startTimer();
     }
@@ -243,8 +237,8 @@
       }
       quizBox.style.display = "none";
       scoreBoard.style.display = "block";
-      document.getElementById("finalScore").textContent = toArabicNumbers(state.score);
-      document.getElementById("totalQuestions").textContent = toArabicNumbers(state.questions.length);
+      document.getElementById("finalScore").textContent = state.score;
+      document.getElementById("totalQuestions").textContent = state.questions.length;
     }
 
     function restartQuiz() {
