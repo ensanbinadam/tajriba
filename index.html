@@ -565,6 +565,20 @@
       return num.toString().replace(/[0-9]/g, d => arabic[d]);
     }
 
+    function togglePause() {
+  state.isPaused = !state.isPaused;
+  const pauseBtn = document.getElementById('pauseBtn');
+  if (state.isPaused) {
+    pauseBtn.textContent = 'استئناف';
+    pauseBtn.style.background = '#28a745';
+    pauseBtn.style.color = 'white';
+  } else {
+    pauseBtn.textContent = 'توقف';
+    pauseBtn.style.background = '#ffc107';
+    pauseBtn.style.color = 'black';
+  }
+}
+
     window.onload = () => {
       const readingText = document.getElementById('readingText');
       if (readingText) readingText.style.display = 'none';
