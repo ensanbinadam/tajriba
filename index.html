@@ -572,7 +572,13 @@
                 options[selectedIndex].classList.add('wrong');
             }
 
-            setTimeout(nextQuestion, 1500);
+            setTimeout(() => {
+                if (state.currentQuestion < state.questions.length - 1) {
+                    nextQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
         }
 
         function nextQuestion() {
