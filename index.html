@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html dir="rtl" lang="ar">
 <head>
-<meta charset="utf-8"/>
-<title>كويز متقدم مع إجابات منفردة</title>
-<style>
-        /* أنماط التصميم (تم تحسينها) */
+  <meta charset="utf-8"/>
+  <title>كويز الثقافة العامة</title>
+  <style>
+       /* أنماط التصميم (تم تحسينها) */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap');
 
         * {
@@ -337,461 +336,248 @@
             padding: 5px;
             width: 100%;
         }
-    </style>
+      </style>
 </head>
 <body>
-<button class="config-btn" onclick="toggleConfigPanel()">⚙️</button>
-<div class="container">
-<div class="header">
-<h1 id="quizTitle">كويز الثقافة العامة 🇸🇦</h1>
-<p id="instructions">اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت</p>
-</div>
-<div class="counters">
-<div id="questionCounter">📌 السؤال ٠ من ٠</div>
-<div id="timer">⏳ الوقت المتبقي: ٠ ثانية</div>
-<div id="scoreCounter">🏆 الدرجات: ٠ من ٠</div>
-</div>
-<!-- ✅ الآن أصبح النص القرائي في مكان مستقل -->
-<div class="reading-text" id="readingText"></div>
-<div class="quiz-box"><div class="question" id="question"></div><div class="options" id="options"></div><div class="controls">
-<button class="nav-btn" disabled="" id="prevBtn" onclick="previousQuestion()">السابق</button>
-<button class="nav-btn pause-btn" id="pauseBtn" onclick="togglePause()">توقف</button>
-<button class="nav-btn" disabled="" id="nextBtn" onclick="nextQuestion()">التالي</button>
-</div><div class="progress-bar">
-<div class="progress" id="progress"></div>
-</div></div>
-</div>
-<div class="score-board" id="scoreBoard">
-<h2>نتيجتك النهائية: <span id="totalQuestions">٠</span>/<span id="finalScore">٠</span></h2>
-<button class="restart-btn" onclick="restartQuiz()">إعادة المحاولة</button>
-</div>
-<div class="config-panel" id="configPanel">
-<h3>لوحة التحكم</h3>
-<label>عنوان الكويز:</label>
-<input class="form-control" id="titleInput" type="text"/>
-<div> <label style="margin-top: 15px;">التوجيهات:</label>
-<textarea class="form-control" id="instructionsInput" rows="5"></textarea>
-</div>
-<div style="margin-top: 20px; text-align: left;">
-<button class="nav-btn" onclick="saveConfig()">حفظ التعديلات</button>
-<button class="nav-btn" onclick="toggleConfigPanel()">إلغاء</button>
-</div>
-</div>
-<script>
-        const quizConfig = {
-            title: "كويز الثقافة العامة 🇸🇦",
-            instructions: "اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت"
-        
-    // ✅ تحميل تلقائي من ملف questions.json في نفس المجلد
-    fetch('questions.json')
-      .then(response => response.json())
-      .then(data => {
-          state.questions = data;
-          init();
-      })
-      .catch(error => {
-          console.error('فشل تحميل ملف الأسئلة:', error);
-      });
+  <div class="container">
+    <div class="header">
+      <h1 id="quizTitle">كويز الثقافة العامة 🇸🇦</h1>
+      <p id="instructions">اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت</p>
+    </div>
 
-};
+    <div class="counters">
+      <div id="questionCounter">📌 السؤال ٠ من ٠</div>
+      <div id="timer">⏳ الوقت المتبقي: ٠ ثانية</div>
+      <div id="scoreCounter">🏆 الدرجات: ٠ من ٠</div>
+    </div>
 
-        const state = {
-            currentQuestion: 0,
-            score: 0,
-            timeLeft: 30,
-            timerId: null,
-            isPaused: false,
-            answeredQuestions: [],
-            questions: [] // سيتم تعبئتها من ملف JSON
-        
-    // ✅ تحميل تلقائي من ملف questions.json في نفس المجلد
-    fetch('questions.json')
-      .then(response => response.json())
-      .then(data => {
-          state.questions = data;
-          init();
-      })
-      .catch(error => {
-          console.error('فشل تحميل ملف الأسئلة:', error);
-      });
+    <div class="reading-text" id="readingText"></div>
 
-};
+    <div class="quiz-box">
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <div class="controls">
+        <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>السابق</button>
+        <button class="nav-btn pause-btn" id="pauseBtn" onclick="togglePause()">توقف</button>
+        <button class="nav-btn" id="nextBtn" onclick="nextQuestion()" disabled>التالي</button>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+    </div>
 
-        function init() {
-            if (!state.questions || state.questions.length === 0) {
-                console.error("لا توجد أسئلة متاحة!");
-                return;
-            }
+    <div class="score-board" id="scoreBoard">
+      <h2>نتيجتك النهائية: <span id="finalScore">٠</span>/<span id="totalQuestions">٠</span></h2>
+      <button class="restart-btn" onclick="restartQuiz()">إعادة المحاولة</button>
+    </div>
+  </div>
 
-            state.answeredQuestions = new Array(state.questions.length).fill(false);
-            showQuestion();
-        }
+  <script>
+    const state = {
+      currentQuestion: 0,
+      score: 0,
+      timeLeft: 30,
+      timerId: null,
+      isPaused: false,
+      answeredQuestions: [],
+      questions: []
+    };
 
-        function showQuestion() {
-            clearInterval(state.timerId);
-            state.timeLeft = 30;
-            updateTimerDisplay();
-
-            const questionObj = state.questions[state.currentQuestion];
-
-            
-const readingDiv = document.getElementById('readingText');
-readingDiv.innerHTML = '';
-if (questionObj.paragraph || questionObj.paragraphImage) {
-    if (questionObj.paragraph) {
-        const paraText = document.createElement('div');
-        paraText.textContent = questionObj.paragraph;
-        readingDiv.appendChild(paraText);
-    }
-    if (questionObj.paragraphImage) {
-        const paraImg = document.createElement('img');
-        paraImg.src = questionObj.paragraphImage;
-        paraImg.className = 'question-image';
-        readingDiv.appendChild(paraImg);
-    }
-    readingDiv.style.display = 'block';
-} else {
-    readingDiv.style.display = 'none';
-}
-
-                
-
-            if (!questionObj || !questionObj.question) {
-                console.error("السؤال غير معرّف بشكل صحيح!");
-                return;
-            
-            }
-
-            const questionElement = document.getElementById('question');
-            const optionsElement = document.getElementById('options');
-
-            questionElement.innerHTML = '';
-            const questionContent = document.createElement('div');
-            questionContent.className = 'question-content';
-
-            if (questionObj.question.text) {
-                const textElement = document.createElement('div');
-                textElement.textContent = questionObj.question.text;
-                questionContent.appendChild(textElement);
-            }
-
-            if (questionObj.question.image) {
-                const imgElement = document.createElement('img');
-                imgElement.src = questionObj.question.image;
-                imgElement.className = 'question-image';
-                questionContent.appendChild(imgElement);
-            }
-
-            questionElement.appendChild(questionContent);
-
-            optionsElement.innerHTML = '';
-            if (!questionObj.options || questionObj.options.length === 0) {
-                console.error("لا توجد خيارات متاحة لهذا السؤال!");
-                return;
-            }
-
-            questionObj.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-
-                const optionContent = document.createElement('div');
-                optionContent.className = 'option-content';
-
-                if (option.image) {
-                    const img = document.createElement('img');
-                    img.src = option.image;
-                    img.className = 'option-image';
-                     // إضافة غلاف للصورة للتحكم الأفضل
-                    const imageContainer = document.createElement('div');
-                    imageContainer.style.width = '200px';
-                    imageContainer.style.height = '150px';
-                    imageContainer.style.overflow = 'hidden';
-                    imageContainer.style.borderRadius = '5px';
-                    optionContent.appendChild(img);
-                }
-
-                if (option.text) {
-                    const text = document.createElement('span');
-                    text.textContent = option.text;
-                    text.className = 'option-text';
-                    optionContent.appendChild(text);
-                }
-
-                optionElement.appendChild(optionContent);
-                optionsElement.appendChild(optionElement);
-
-
-                if (state.answeredQuestions[state.currentQuestion]) {
-                    optionElement.style.pointerEvents = 'none';
-                    if (index === questionObj.correct) {
-                        optionElement.classList.add('correct');
-                    }
-                }
-
-                optionElement.onclick = () => {
-                    checkAnswer(index);
-                
-    // ✅ تحميل تلقائي من ملف questions.json في نفس المجلد
-    fetch('questions.json')
-      .then(response => response.json())
-      .then(data => {
-          state.questions = data;
-          init();
-      })
-      .catch(error => {
-          console.error('فشل تحميل ملف الأسئلة:', error);
-      });
-
-};
-
-                optionsElement.appendChild(optionElement);
-            });
-
-            document.getElementById('prevBtn').disabled = state.currentQuestion === 0;
-            document.getElementById('nextBtn').disabled = false;
-
-            document.getElementById('progress').style.width =
-                `${(state.currentQuestion / state.questions.length) * 100}%`;
-
-            updateQuestionCounter();
-            updateScoreCounter();
-            startTimer();
-        }
-
-        function startTimer() {
-            state.timerId = setInterval(() => {
-                if (!state.isPaused) {
-                    state.timeLeft--;
-                    updateTimerDisplay();
-                    if (state.timeLeft <= 0) {
-                        clearInterval(state.timerId);
-                        nextQuestion();
-                    }
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            document.getElementById('timer').textContent =
-                `الوقت المتبقي: ${toArabicNumbers(state.timeLeft)} ثانية`;
-        }
-
-        function checkAnswer(selectedIndex) {
-            const options = document.querySelectorAll('.option');
-            const correctIndex = state.questions[state.currentQuestion].correct;
-
-            if (state.answeredQuestions[state.currentQuestion]) return;
-
-            options.forEach(option => option.style.pointerEvents = 'none');
-
-            options[correctIndex].classList.add('correct');
-
-            if (selectedIndex === correctIndex) {
-                state.score++;
-                state.answeredQuestions[state.currentQuestion] = true;
-                updateScoreCounter();
-            } else {
-                options[selectedIndex].classList.add('wrong');
-            }
-
-            if (state.currentQuestion < state.questions.length - 1) {
-                setTimeout(() => {
-        if (state.currentQuestion < state.questions.length - 1) {
-            nextQuestion();
-        } else {
-            showResult();
-        }
-    }, 1500);
-            } else {
-                setTimeout(showResult, 1500);
-            }
-        }
-
-        function nextQuestion() {
-    if (state.currentQuestion >= state.questions.length - 1) {
-        showResult();
+    function init() {
+      if (!state.questions || state.questions.length === 0) {
+        console.error("لا توجد أسئلة متاحة!");
         return;
-    }
-            if (state.currentQuestion < state.questions.length - 1) {
-                state.currentQuestion++;
-                showQuestion();
-            } else {
-                showResult();
-            }
-        }
-
-        function previousQuestion() {
-            if (state.currentQuestion > 0) {
-                state.currentQuestion--;
-                showQuestion();
-            }
-            document.getElementById('nextBtn').disabled = false;
-        }
-
-        function showResult() {
-            const quizBox = document.querySelector('.quiz-box');
-            const scoreBoard = document.getElementById('scoreBoard');
-
-            if (quizBox && scoreBoard) {
-                quizBox.style.display = 'none';
-                scoreBoard.style.display = 'block';
-document.getElementById('readingText').style.display = 'none';
-                document.getElementById('finalScore').textContent = toArabicNumbers(state.score);
-                document.getElementById('totalQuestions').textContent = toArabicNumbers(state.questions.length);
-            } else {
-                console.error('عناصر النتيجة غير موجودة في الصفحة');
-            }
-        }
-
-        function restartQuiz() {
-            state.currentQuestion = 0;
-            state.score = 0;
-            state.timeLeft = 30;
-            state.answeredQuestions.fill(false);
-            document.querySelector('.quiz-box').style.display = 'block';
-            document.getElementById('scoreBoard').style.display = 'none';
-            document.getElementById('progress').style.width = '0%';
-            document.querySelectorAll('.option').forEach(option => {
-                option.classList.remove('correct', 'wrong');
-                option.style.pointerEvents = 'auto';
-            });
-            showQuestion();
-        }
-
-        function togglePause() {
-            state.isPaused = !state.isPaused;
-            const btn = document.getElementById('pauseBtn');
-            btn.textContent = state.isPaused ? 'استئناف' : 'توقف';
-            btn.style.background = state.isPaused ? '#28a745' : '#ffc107';
-        }
-
-        function toggleConfigPanel() {
-            const panel = document.getElementById('configPanel');
-            if (panel.style.display === 'block') {
-                panel.style.display = 'none';
-            } else {
-                panel.style.display = 'block';
-                document.getElementById('titleInput').value = quizConfig.title;
-                document.getElementById('instructionsInput').value = quizConfig.instructions;
-            }
-        }
-
-        function saveConfig() {
-            const newTitle = document.getElementById('titleInput').value;
-            const newInstructions = document.getElementById('instructionsInput').value;
-
-            if (newTitle) {
-                quizConfig.title = newTitle;
-                document.getElementById('quizTitle').textContent = newTitle;
-            }
-
-            if (newInstructions) {
-                quizConfig.instructions = newInstructions;
-                document.getElementById('instructions').textContent = newInstructions;
-            }
-
-            toggleConfigPanel();
-        }
-
-        function toArabicNumbers(num) {
-            if (num === undefined || num === null) {
-                return "٠";
-            }
-            const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-            return num.toString().replace(/\d/g, digit => arabicNumbers[digit]);
-        }
-
-        function updateQuestionCounter() {
-            document.getElementById('questionCounter').textContent =
-                `السؤال ${toArabicNumbers(state.currentQuestion + 1)} من ${toArabicNumbers(state.questions.length)}`;
-        }
-
-        function updateScoreCounter() {
-            document.getElementById('scoreCounter').textContent =
-                `الدرجات: ${toArabicNumbers(state.score)} من ${toArabicNumbers(state.questions.length)}`;
-        }
-
-        function loadQuestionsFromFile() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function (e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const loadedQuestions = JSON.parse(e.target.result);
-                        state.questions = loadedQuestions;
-                        init();
-                    
-    // ✅ تحميل تلقائي من ملف questions.json في نفس المجلد
-    fetch('questions.json')
-      .then(response => response.json())
-      .then(data => {
-          state.questions = data;
-          init();
-      })
-      .catch(error => {
-          console.error('فشل تحميل ملف الأسئلة:', error);
-      });
-
-};
-                    reader.readAsText(file);
-                }
-            
-    // ✅ تحميل تلقائي من ملف questions.json في نفس المجلد
-    fetch('questions.json')
-      .then(response => response.json())
-      .then(data => {
-          state.questions = data;
-          init();
-      })
-      .catch(error => {
-          console.error('فشل تحميل ملف الأسئلة:', error);
-      });
-
-};
-            input.click();
-        }
-
-        
-
-window.onload = () => {
-    // ✅ إخفاء النص القرائي عند فتح الصفحة
-    const readingText = document.getElementById('readingText');
-    if (readingText) {
-        readingText.style.display = 'none';
+      }
+      state.answeredQuestions = new Array(state.questions.length).fill(false);
+      showQuestion();
     }
 
-    // ✅ زر تحميل الأسئلة
-    const loadButton = document.createElement('button');
-    loadButton.textContent = 'تحميل الأسئلة من ملف';
-    loadButton.className = 'nav-btn';
-    loadButton.style.margin = '10px auto';
-    loadButton.style.display = 'block';
-    loadButton.onclick = loadQuestionsFromFile;
-    document.querySelector('.header').appendChild(loadButton);
+    function showQuestion() {
+      if (!state.questions || !state.questions[state.currentQuestion]) {
+        console.error("لا يوجد سؤال صالح.");
+        return;
+      }
 
-    // ✅ تحديث العدادات الأولية
-    document.getElementById('questionCounter').innerHTML = `📌 السؤال ٠ من ${toArabicNumbers(state.questions.length)}`;
-    document.getElementById('timer').innerHTML = `⏳ الوقت المتبقي: ${toArabicNumbers(state.timeLeft)} ثانية`;
-    document.getElementById('scoreCounter').innerHTML = `🏆 الدرجات: ٠ من ${toArabicNumbers(state.questions.length)}`;
-    document.getElementById('totalQuestions').textContent = toArabicNumbers(state.questions.length);
+      clearInterval(state.timerId);
+      state.timeLeft = 30;
+      updateTimerDisplay();
 
-    // ✅ تحميل تلقائي من ملف questions.json في نفس المجلد
-    fetch('questions.json')
-      .then(response => response.json())
-      .then(data => {
-          state.questions = data;
-          init();
-      })
-      .catch(error => {
-          console.error('فشل تحميل ملف الأسئلة:', error);
+      const questionObj = state.questions[state.currentQuestion];
+      const readingDiv = document.getElementById('readingText');
+      readingDiv.innerHTML = '';
+      if (questionObj.paragraph || questionObj.paragraphImage) {
+        if (questionObj.paragraph) {
+          const paraText = document.createElement('div');
+          paraText.textContent = questionObj.paragraph;
+          readingDiv.appendChild(paraText);
+        }
+        if (questionObj.paragraphImage) {
+          const paraImg = document.createElement('img');
+          paraImg.src = questionObj.paragraphImage;
+          paraImg.className = 'question-image';
+          readingDiv.appendChild(paraImg);
+        }
+        readingDiv.style.display = 'block';
+      } else {
+        readingDiv.style.display = 'none';
+      }
+
+      const questionElement = document.getElementById('question');
+      const optionsElement = document.getElementById('options');
+      questionElement.innerHTML = '';
+      optionsElement.innerHTML = '';
+
+      const questionContent = document.createElement('div');
+      questionContent.className = 'question-content';
+
+      if (questionObj.question.text) {
+        const textElement = document.createElement('div');
+        textElement.textContent = questionObj.question.text;
+        questionContent.appendChild(textElement);
+      }
+      if (questionObj.question.image) {
+        const imgElement = document.createElement('img');
+        imgElement.src = questionObj.question.image;
+        imgElement.className = 'question-image';
+        questionContent.appendChild(imgElement);
+      }
+      questionElement.appendChild(questionContent);
+
+      questionObj.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        const optionContent = document.createElement('div');
+        optionContent.className = 'option-content';
+        if (option.image) {
+          const img = document.createElement('img');
+          img.src = option.image;
+          optionContent.appendChild(img);
+        }
+        if (option.text) {
+          const text = document.createElement('span');
+          text.textContent = option.text;
+          text.className = 'option-text';
+          optionContent.appendChild(text);
+        }
+        optionElement.appendChild(optionContent);
+        optionElement.onclick = () => checkAnswer(index);
+        optionsElement.appendChild(optionElement);
       });
 
-};
+      document.getElementById('prevBtn').disabled = state.currentQuestion === 0;
+      document.getElementById('nextBtn').disabled = false;
+      document.getElementById('progress').style.width = `${(state.currentQuestion / state.questions.length) * 100}%`;
+      updateQuestionCounter();
+      updateScoreCounter();
+      startTimer();
+    }
 
+    function startTimer() {
+      state.timerId = setInterval(() => {
+        if (!state.isPaused) {
+          state.timeLeft--;
+          updateTimerDisplay();
+          if (state.timeLeft <= 0) {
+            clearInterval(state.timerId);
+            nextQuestion();
+          }
+        }
+      }, 1000);
+    }
 
-    </script>
+    function updateTimerDisplay() {
+      document.getElementById('timer').textContent = `الوقت المتبقي: ${toArabicNumbers(state.timeLeft)} ثانية`;
+    }
+
+    function checkAnswer(selectedIndex) {
+      const options = document.querySelectorAll('.option');
+      const correctIndex = state.questions[state.currentQuestion].correct;
+      if (state.answeredQuestions[state.currentQuestion]) return;
+      options.forEach(option => option.style.pointerEvents = 'none');
+      options[correctIndex].classList.add('correct');
+      if (selectedIndex !== correctIndex) {
+        options[selectedIndex].classList.add('wrong');
+      } else {
+        state.score++;
+        state.answeredQuestions[state.currentQuestion] = true;
+        updateScoreCounter();
+      }
+      setTimeout(() => {
+        if (state.currentQuestion < state.questions.length - 1) {
+          nextQuestion();
+        } else {
+          showResult();
+        }
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      if (state.currentQuestion < state.questions.length - 1) {
+        state.currentQuestion++;
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function previousQuestion() {
+      if (state.currentQuestion > 0) {
+        state.currentQuestion--;
+        showQuestion();
+      }
+    }
+
+    function showResult() {
+      document.querySelector('.quiz-box').style.display = 'none';
+      document.getElementById('scoreBoard').style.display = 'block';
+      document.getElementById('readingText').style.display = 'none';
+      document.getElementById('finalScore').textContent = toArabicNumbers(state.score);
+      document.getElementById('totalQuestions').textContent = toArabicNumbers(state.questions.length);
+    }
+
+    function restartQuiz() {
+      state.currentQuestion = 0;
+      state.score = 0;
+      state.timeLeft = 30;
+      state.answeredQuestions.fill(false);
+      document.querySelector('.quiz-box').style.display = 'block';
+      document.getElementById('scoreBoard').style.display = 'none';
+      document.getElementById('progress').style.width = '0%';
+      document.querySelectorAll('.option').forEach(option => {
+        option.classList.remove('correct', 'wrong');
+        option.style.pointerEvents = 'auto';
+      });
+      showQuestion();
+    }
+
+    function updateQuestionCounter() {
+      document.getElementById('questionCounter').textContent =
+        `السؤال ${toArabicNumbers(state.currentQuestion + 1)} من ${toArabicNumbers(state.questions.length)}`;
+    }
+
+    function updateScoreCounter() {
+      document.getElementById('scoreCounter').textContent =
+        `الدرجات: ${toArabicNumbers(state.score)} من ${toArabicNumbers(state.questions.length)}`;
+    }
+
+    function toArabicNumbers(num) {
+      const arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      return num.toString().replace(/[0-9]/g, d => arabic[d]);
+    }
+
+    window.onload = () => {
+      const readingText = document.getElementById('readingText');
+      if (readingText) readingText.style.display = 'none';
+      fetch('questions.json')
+        .then(res => res.json())
+        .then(data => {
+          state.questions = data;
+          init();
+        })
+        .catch(err => {
+          console.error("فشل تحميل ملف الأسئلة", err);
+        });
+    }
+  </script>
 </body>
 </html>
