@@ -563,6 +563,9 @@ function saveConfig() {
       document.getElementById('scoreBoard').style.display = 'block';
       document.getElementById('readingText').style.display = 'none';
       document.getElementById('finalScore').textContent = toArabicNumbers(state.score);
+      document.getElementById('questionCounter').style.display = 'none';
+      document.getElementById('scoreCounter').style.display = 'none';
+      document.getElementById('timer').style.display = 'none';
       document.getElementById('totalQuestions').textContent = toArabicNumbers(state.questions.length);
     }
 
