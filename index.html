@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html dir="rtl" lang="ar">
 <head>
-  <meta charset="utf-8"/>
-  <title>كويز الثقافة العامة</title>
-  <style>
+<meta charset="utf-8"/>
+<title>مراجعة نافس لمادة لغتي</title>
+<style>
        /* أنماط التصميم (تم تحسينها) */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap');
 
@@ -335,44 +336,74 @@
             text-align: center; /* توسيط النص */
             padding: 5px;
             width: 100%;
+            font-size: 2em; /* 👈 هذا السطر الجديد */
+
         }
       </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1 id="quizTitle">كويز الثقافة العامة 🇸🇦</h1>
-      <p id="instructions">اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت</p>
-    </div>
+<button class="config-btn" onclick="toggleConfigPanel()">⚙️</button><div class="container">
+<div class="header">
+<h1 id="quizTitle">كويز الثقافة العامة 🇸🇦</h1>
+<p id="instructions">اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت</p>
+</div>
+<div class="counters">
+<div id="questionCounter">📌 السؤال ٠ من ٠</div>
+<div id="timer">⏳ الوقت المتبقي: ٠ ثانية</div>
+<div id="scoreCounter">🏆 الدرجات: ٠ من ٠</div>
+</div>
+<div class="reading-text" id="readingText"></div>
+<div class="quiz-box">
+<div class="question" id="question"></div>
+<div class="options" id="options"></div>
+<div class="controls">
+<button class="nav-btn" disabled="" id="prevBtn" onclick="previousQuestion()">السابق</button>
+<button class="nav-btn pause-btn" id="pauseBtn" onclick="togglePause()">توقف</button>
+<button class="nav-btn" disabled="" id="nextBtn" onclick="nextQuestion()">التالي</button>
+</div>
+<div class="progress-bar">
+<div class="progress" id="progress"></div>
+</div>
+</div>
+<div class="score-board" id="scoreBoard">
+<h2>نتيجتك النهائية: <span id="finalScore">٠</span>/<span id="totalQuestions">٠</span></h2>
+<button class="restart-btn" onclick="restartQuiz()">إعادة المحاولة</button>
+</div>
+</div>
+<script>
+const quizConfig = {
+    title: "كويز الثقافة العامة 🇸🇦",
+    instructions: "اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت"
+};
 
-    <div class="counters">
-      <div id="questionCounter">📌 السؤال ٠ من ٠</div>
-      <div id="timer">⏳ الوقت المتبقي: ٠ ثانية</div>
-      <div id="scoreCounter">🏆 الدرجات: ٠ من ٠</div>
-    </div>
+function toggleConfigPanel() {
+    const panel = document.getElementById('configPanel');
+    if (panel.style.display === 'block') {
+        panel.style.display = 'none';
+    } else {
+        panel.style.display = 'block';
+        document.getElementById('titleInput').value = quizConfig.title;
+        document.getElementById('instructionsInput').value = quizConfig.instructions;
+    }
+}
 
-    <div class="reading-text" id="readingText"></div>
+function saveConfig() {
+    const newTitle = document.getElementById('titleInput').value;
+    const newInstructions = document.getElementById('instructionsInput').value;
 
-    <div class="quiz-box">
-      <div class="question" id="question"></div>
-      <div class="options" id="options"></div>
-      <div class="controls">
-        <button class="nav-btn" id="prevBtn" onclick="previousQuestion()" disabled>السابق</button>
-        <button class="nav-btn pause-btn" id="pauseBtn" onclick="togglePause()">توقف</button>
-        <button class="nav-btn" id="nextBtn" onclick="nextQuestion()" disabled>التالي</button>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" id="progress"></div>
-      </div>
-    </div>
+    if (newTitle) {
+        quizConfig.title = newTitle;
+        document.getElementById('quizTitle').textContent = newTitle;
+    }
 
-    <div class="score-board" id="scoreBoard">
-      <h2>نتيجتك النهائية: <span id="finalScore">٠</span>/<span id="totalQuestions">٠</span></h2>
-      <button class="restart-btn" onclick="restartQuiz()">إعادة المحاولة</button>
-    </div>
-  </div>
+    if (newInstructions) {
+        quizConfig.instructions = newInstructions;
+        document.getElementById('instructions').textContent = newInstructions;
+    }
 
-  <script>
+    toggleConfigPanel();
+}
+</script><script>
     const state = {
       currentQuestion: 0,
       score: 0,
@@ -531,8 +562,7 @@
       document.querySelector('.quiz-box').style.display = 'none';
       document.getElementById('scoreBoard').style.display = 'block';
       document.getElementById('readingText').style.display = 'none';
-      document.querySelector('.counters').style.display = 'none';
-                document.getElementById('finalScore').textContent = toArabicNumbers(state.score);
+      document.getElementById('finalScore').textContent = toArabicNumbers(state.score);
       document.getElementById('totalQuestions').textContent = toArabicNumbers(state.questions.length);
     }
 
@@ -594,5 +624,16 @@
         });
     }
   </script>
-</body>
+<div class="config-panel" id="configPanel">
+<h3>لوحة التحكم</h3>
+<label>عنوان الكويز:</label>
+<input class="form-control" id="titleInput" type="text"/>
+<div> <label style="margin-top: 15px;">التوجيهات:</label>
+<textarea class="form-control" id="instructionsInput" rows="5"></textarea>
+</div>
+<div style="margin-top: 20px; text-align: left;">
+<button class="nav-btn" onclick="saveConfig()">حفظ التعديلات</button>
+<button class="nav-btn" onclick="toggleConfigPanel()">إلغاء</button>
+</div>
+</div></body>
 </html>
