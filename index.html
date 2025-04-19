@@ -3,7 +3,7 @@
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="utf-8"/>
-<title>مراجعة نافس لمادة لغتي</title>
+<title>مراجعة نافس لمادة الرياضيات</title>
 <style>
        /* أنماط التصميم (تم تحسينها) */
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap');
@@ -340,35 +340,14 @@
 
         }
       </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-<script>
-let adminPassword = "";
-fetch('config.json')
-  .then(res => res.json())
-  .then(config => {
-    adminPassword = config.adminPassword;
-  })
-  .catch(() => {
-    console.warn("تعذر تحميل ملف config.json");
-  });
-</script>
-
 </head>
 <body>
 
 <!-- ✅ شاشة البداية -->
 <div id="introScreen" style="direction: rtl; text-align: center; padding: 40px;">
-  <img alt="الشعار" style="width: 120px; margin-bottom: 20px;">
-  <h2 style="font-family: 'Tajawal'; margin-bottom: 10px;">مادة لغتي الجميلة</h2>
-  <p style="font-size: 18px; margin-bottom: 10px;">
-  <div style="margin-bottom: 20px;">
-    <input id="studentName" placeholder="الاسم الكامل" style="padding: 10px; width: 60%; font-size: 18px;" />
-  </div>
-  <div style="margin-bottom: 30px;">
-    <input id="studentId" placeholder="رقم الطالب أو الصف" style="padding: 10px; width: 60%; font-size: 18px;" />
-  </div>
-
+  <img src="https://via.placeholder.com/120x120.png?text=شعار" alt="الشعار" style="width: 120px; margin-bottom: 20px;">
+  <h2 style="font-family: 'Tajawal'; margin-bottom: 10px;">مادة الرياضيات للصف السادس</h2>
+  <p style="font-size: 18px; margin-bottom: 30px;">
     اقرأ التعليمات جيدًا قبل البدء، ثم اضغط على زر "ابدأ الكويز".
   </p>
   <button onclick="startQuiz()" style="padding: 10px 30px; font-size: 20px;">ابدأ الكويز</button>
@@ -376,62 +355,14 @@ fetch('config.json')
 
 <script>
 function startQuiz() {
-    const name = document.getElementById('studentName').value.trim();
-    const id = document.getElementById('studentId').value.trim();
-    if (!name || !id) {
-        alert("يرجى إدخال الاسم والرقم أولاً.");
-        return;
-    }
-    state.student = { name, id, score: 0, timestamp: new Date().toLocaleString() };
     document.getElementById('introScreen').style.display = 'none';
     document.querySelector('.container').style.display = 'block';
 }
 </script>
 
-<script>
-
-
-function exportResults() {
-    const password = prompt("أدخل كلمة المرور لتصدير النتائج:");
-    if (password !== adminPassword) {
-        alert("كلمة المرور غير صحيحة.");
-        return;
-    }
-
-    if (results.length === 0) {
-        alert("لا توجد نتائج حالياً.");
-        return;
-    }
-
-    const worksheet = XLSX.utils.json_to_sheet(results);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "نتائج الطلاب");
-
-    const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
-
-    function s2ab(s) {
-        const buf = new ArrayBuffer(s.length);
-        const view = new Uint8Array(buf);
-        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-        return buf;
-    }
-
-    const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "نتائج_الطلاب.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-
-
-</script>
-
 <button class="config-btn" onclick="toggleConfigPanel()">⚙️</button><div class="container">
 <div class="header">
-<h1 id="quizTitle">كويز الثقافة العامة 🇸🇦</h1>
+<h1 id="quizTitle">نافس الصف السادس ـ الرياضيات🇸🇦</h1>
 <p id="instructions">اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت</p>
 </div>
 <div class="counters">
@@ -463,21 +394,14 @@ const quizConfig = {
     instructions: "اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت"
 };
 
-
 function toggleConfigPanel() {
     const panel = document.getElementById('configPanel');
     if (panel.style.display === 'block') {
         panel.style.display = 'none';
     } else {
-        const password = prompt("أدخل كلمة المرور لفتح لوحة التحكم:");
-        if (password !== adminPassword) {
-            alert("كلمة المرور غير صحيحة.");
-            return;
-        }
         panel.style.display = 'block';
         document.getElementById('titleInput').value = quizConfig.title;
         document.getElementById('instructionsInput').value = quizConfig.instructions;
-
     }
 }
 
@@ -497,49 +421,8 @@ function saveConfig() {
 
     toggleConfigPanel();
 }
-
-
-
-function exportResults() {
-    const password = prompt("أدخل كلمة المرور لتصدير النتائج:");
-    if (password !== adminPassword) {
-        alert("كلمة المرور غير صحيحة.");
-        return;
-    }
-
-    if (results.length === 0) {
-        alert("لا توجد نتائج حالياً.");
-        return;
-    }
-
-    const worksheet = XLSX.utils.json_to_sheet(results);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "نتائج الطلاب");
-
-    const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
-
-    function s2ab(s) {
-        const buf = new ArrayBuffer(s.length);
-        const view = new Uint8Array(buf);
-        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-        return buf;
-    }
-
-    const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "نتائج_الطلاب.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-
-
 </script><script>
-    const results = [];
-
-const state = {
+    const state = {
       currentQuestion: 0,
       score: 0,
       timeLeft: 30,
@@ -694,7 +577,6 @@ const state = {
     }
 
     function showResult() {
-  if (state.student) results.push({ ...state.student, score: state.score });
       document.querySelector('.quiz-box').style.display = 'none';
       document.getElementById('scoreBoard').style.display = 'block';
       document.getElementById('readingText').style.display = 'none';
@@ -764,46 +646,7 @@ const state = {
           console.error("فشل تحميل ملف الأسئلة", err);
         });
     }
-  
-
-
-function exportResults() {
-    const password = prompt("أدخل كلمة المرور لتصدير النتائج:");
-    if (password !== adminPassword) {
-        alert("كلمة المرور غير صحيحة.");
-        return;
-    }
-
-    if (results.length === 0) {
-        alert("لا توجد نتائج حالياً.");
-        return;
-    }
-
-    const worksheet = XLSX.utils.json_to_sheet(results);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "نتائج الطلاب");
-
-    const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
-
-    function s2ab(s) {
-        const buf = new ArrayBuffer(s.length);
-        const view = new Uint8Array(buf);
-        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-        return buf;
-    }
-
-    const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "نتائج_الطلاب.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-
-
-</script>
+  </script>
 <div class="config-panel" id="configPanel">
 <h3>لوحة التحكم</h3>
 <label>عنوان الكويز:</label>
@@ -813,9 +656,6 @@ function exportResults() {
 </div>
 <div style="margin-top: 20px; text-align: left;">
 <button class="nav-btn" onclick="saveConfig()">حفظ التعديلات</button>
-
-<button class="nav-btn" onclick="exportResults()" style="margin-top: 20px;">📥 تصدير النتائج</button>
-
 <button class="nav-btn" onclick="toggleConfigPanel()">إلغاء</button>
 </div>
 </div></body>
