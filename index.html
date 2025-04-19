@@ -345,7 +345,7 @@
 
 <!-- ✅ شاشة البداية -->
 <div id="introScreen" style="direction: rtl; text-align: center; padding: 40px;">
-  <img src="https://via.placeholder.com/120x120.png?text=شعار" alt="الشعار" style="width: 120px; margin-bottom: 20px;">
+  <img src="https://www.etec.gov.sa/assets/media/logos/etec-logoW.svg?text=شعار" alt="الشعار" style="width: 120px; margin-bottom: 20px;">
   <h2 style="font-family: 'Tajawal'; margin-bottom: 10px;">مادة الرياضيات للصف السادس</h2>
   <p style="font-size: 18px; margin-bottom: 30px;">
     اقرأ التعليمات جيدًا قبل البدء، ثم اضغط على زر "ابدأ الكويز".
@@ -360,7 +360,7 @@ function startQuiz() {
 }
 </script>
 
-<button class="config-btn" onclick="toggleConfigPanel()">⚙️</button><div class="container">
+<div class="container">
 <div class="header">
 <h1 id="quizTitle">نافس الصف السادس ـ الرياضيات🇸🇦</h1>
 <p id="instructions">اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت</p>
@@ -394,33 +394,6 @@ const quizConfig = {
     instructions: "اختر الإجابة الصحيحة لكل سؤال قبل انتهاء الوقت"
 };
 
-function toggleConfigPanel() {
-    const panel = document.getElementById('configPanel');
-    if (panel.style.display === 'block') {
-        panel.style.display = 'none';
-    } else {
-        panel.style.display = 'block';
-        document.getElementById('titleInput').value = quizConfig.title;
-        document.getElementById('instructionsInput').value = quizConfig.instructions;
-    }
-}
-
-function saveConfig() {
-    const newTitle = document.getElementById('titleInput').value;
-    const newInstructions = document.getElementById('instructionsInput').value;
-
-    if (newTitle) {
-        quizConfig.title = newTitle;
-        document.getElementById('quizTitle').textContent = newTitle;
-    }
-
-    if (newInstructions) {
-        quizConfig.instructions = newInstructions;
-        document.getElementById('instructions').textContent = newInstructions;
-    }
-
-    toggleConfigPanel();
-}
 </script><script>
     const state = {
       currentQuestion: 0,
@@ -467,9 +440,7 @@ function saveConfig() {
           readingDiv.appendChild(paraImg);
         }
         readingDiv.style.display = 'block';
-      } else {
-        readingDiv.style.display = 'none';
-      }
+      } 
 
       const questionElement = document.getElementById('question');
       const optionsElement = document.getElementById('options');
@@ -546,17 +517,11 @@ function saveConfig() {
       options[correctIndex].classList.add('correct');
       if (selectedIndex !== correctIndex) {
         options[selectedIndex].classList.add('wrong');
-      } else {
-        state.score++;
-        state.answeredQuestions[state.currentQuestion] = true;
-        updateScoreCounter();
-      }
+      } 
       setTimeout(() => {
         if (state.currentQuestion < state.questions.length - 1) {
           nextQuestion();
-        } else {
-          showResult();
-        }
+        } 
       }, 1500);
     }
 
@@ -564,9 +529,7 @@ function saveConfig() {
       if (state.currentQuestion < state.questions.length - 1) {
         state.currentQuestion++;
         showQuestion();
-      } else {
-        showResult();
-      }
+      } 
     }
 
     function previousQuestion() {
@@ -625,11 +588,7 @@ function saveConfig() {
           pauseBtn.textContent = 'استئناف';
           pauseBtn.style.background = '#28a745';
           pauseBtn.style.color = 'white';
-        } else {
-          pauseBtn.textContent = 'توقف';
-          pauseBtn.style.background = '#ffc107';
-          pauseBtn.style.color = 'black';
-        }
+        } 
       }
 
     window.onload = () => {
@@ -647,16 +606,5 @@ function saveConfig() {
         });
     }
   </script>
-<div class="config-panel" id="configPanel">
-<h3>لوحة التحكم</h3>
-<label>عنوان الكويز:</label>
-<input class="form-control" id="titleInput" type="text"/>
-<div> <label style="margin-top: 15px;">التوجيهات:</label>
-<textarea class="form-control" id="instructionsInput" rows="5"></textarea>
-</div>
-<div style="margin-top: 20px; text-align: left;">
-<button class="nav-btn" onclick="saveConfig()">حفظ التعديلات</button>
-<button class="nav-btn" onclick="toggleConfigPanel()">إلغاء</button>
-</div>
-</div></body>
+</body>
 </html>
